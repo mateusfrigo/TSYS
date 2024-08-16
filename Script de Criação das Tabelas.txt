@@ -1,0 +1,47 @@
+-- Tabela Contas
+CREATE TABLE ACCOUNT(
+    ACCOUNTNUMBER INTEGER PRIMARY KEY,
+    BALANCE DECIMAL(15,2) NOT NULL
+);
+
+-- Tabela Cartões
+
+CREATE TABLE CARD (
+    CardNumber INTEGER NOT NULL,
+    ExpiryDate DATE NOT NULL,
+    SecurityCode CHAR(3) NOT NULL,
+    AccountNumber INTEGER NOT NULL,
+    PRIMARY KEY (CardNumber, AccountNumber),
+    FOREIGN KEY (AccountNumber) REFERENCES Account(AccountNumber)
+);
+
+-- Tabela Fatura
+
+CREATE TABLE AccountStatement (
+    StatementNumber INTEGER NOT NULL,
+    BillingDate DATE NOT NULL,
+    TotalAmountDue DECIMAL(15, 2) NOT NULL,
+    AccountNumber INTEGER NOT NULL,
+    PRIMARY KEY (StatementNumber, AccountNumber, BillingDate),
+    FOREIGN KEY (AccountNumber) REFERENCES Account(AccountNumber)
+);
+
+-- Tabela Transações
+
+CREATE TABLE Transaction (
+    TransactionNumber INTEGER NOT NULL,
+    Nature VARCHAR(50) NOT NULL,
+    Type VARCHAR(50) NOT NULL,
+    TransactionDate DATE NOT NULL,
+    Amount DECIMAL(15, 2) NOT NULL,
+    Description VARCHAR2(200),
+    CardNumber INTEGER,
+    AccountNumber INTEGER,
+    PRIMARY KEY (TransactionNumber),
+    FOREIGN KEY (CardNumber, AccountNumber) REFERENCES Card(CardNumber, AccountNumber),
+    FOREIGN KEY (AccountNumber) REFERENCES Account(AccountNumber),
+    CHECK (CardNumber IS NOT NULL OR AccountNumber IS NOT NULL)
+);
+
+
+
